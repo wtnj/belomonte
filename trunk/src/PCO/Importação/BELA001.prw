@@ -362,7 +362,7 @@ else
 	dbSelectArea("AK1")
 	AK1->(dbSetOrder(1))
 	if !AK1->(dbSeek(xFilial("AK1")+Padr(aItens[2],TamSX3("AK2_ORCAME")[1])+AllTrim(Strzero(Val(aItens[3]),4)) ))
-		aadd(aLogAux,"Planilha Orçamentária não Cadastrada!"+c_ent)
+		aadd(aLogAux,"Planilha Orçamentária "+Padr(aItens[2],TamSX3("AK2_ORCAME")[1])+AllTrim(Strzero(Val(aItens[3]),4))+" não Cadastrada!"+c_ent)
 		lRet := .F.
 	endif
 endif
@@ -374,7 +374,7 @@ else
 	dbSelectArea("AK5")
 	AK5->(dbSetOrder(1))
 	if !AK5->(dbSeek(xFilial("AK5")+aItens[4] ))
-		aadd(aLogAux,"Conta Orçamentária não Cadastrada!"+c_ent)
+		aadd(aLogAux,"Conta Orçamentária "+aItens[4]+" não Cadastrada!"+c_ent)
 		lRet := .F.
 	endif
 endif
@@ -386,7 +386,7 @@ else
 	dbSelectArea("AK6")
 	AK6->(dbSetOrder(1))
 	if !AK6->(dbSeek(xFilial("AK6")+aItens[6] ))
-		aadd(aLogAux,"Classe Orçamentária não Cadastrada!"+c_ent)
+		aadd(aLogAux,"Classe Orçamentária "+aItens[6]+" não Cadastrada!"+c_ent)
 		lRet := .F.
 	endif
 endif
@@ -398,7 +398,7 @@ else
 	dbSelectArea("AMF")
 	AMF->(dbSetOrder(1))
 	if !AMF->(dbSeek(xFilial("AMF")+aItens[9] ))
-		aadd(aLogAux,"Unidade Orçamentária não Cadastrada!"+c_ent)
+		aadd(aLogAux,"Unidade Orçamentária "+aItens[9]+" não Cadastrada!"+c_ent)
 		lRet := .F.
 	endif
 endif
@@ -410,7 +410,7 @@ else
 	dbSelectArea("AKF")
 	AKF->(dbSetOrder(1))
 	if !AKF->(dbSeek(xFilial("AKF")+aItens[10] ))
-		aadd(aLogAux,"Operação Orçamentária não Cadastrada!"+c_ent)
+		aadd(aLogAux,"Operação Orçamentária "+aItens[10]+" não Cadastrada!"+c_ent)
 		lRet := .F.
 	endif
 endif
@@ -422,7 +422,7 @@ else
 	dbSelectArea("CTT")
 	CTT->(dbSetOrder(1))
 	if !CTT->(dbSeek(xFilial("CTT")+aItens[12] ))
-		aadd(aLogAux,"Centro de Custos não Cadastrado!"+c_ent)
+		aadd(aLogAux,"Centro de Custos "+aItens[12]+" não Cadastrado!"+c_ent)
 		lRet := .F.
 	endif
 endif
@@ -434,7 +434,7 @@ else
 	dbSelectArea("CTD")
 	CTD->(dbSetOrder(1))
 	if !CTD->(dbSeek(xFilial("CTD")+aItens[16] ))
-		aadd(aLogAux,"Item Contábil não Cadastrado!"+c_ent)
+		aadd(aLogAux,"Item Contábil "+aItens[16]+" não Cadastrado!"+c_ent)
 		lRet := .F.
 	endif
 endif
@@ -446,7 +446,7 @@ else
 	dbSelectArea("CTH")
 	CTH->(dbSetOrder(1))
 	if !CTH->(dbSeek(xFilial("CTH")+aItens[14] ))
-		aadd(aLogAux,"Classe de Valor não Cadastrada!"+c_ent)
+		aadd(aLogAux,"Classe de Valor "+aItens[14]+" não Cadastrada!"+c_ent)
 		lRet := .F.
 	endif
 endif
