@@ -164,7 +164,7 @@ cQuery += "SELECT AKD_CC AS CENCUS,AK5_COSUP,"+cTab+".R_E_C_N_O_ AS REC"+cTab+",
 For nCont := 1 to Len(aBreaks)
 	cQuery += aBreaks[nCont,5]+","+aBreaks[nCont,6] + iif(nCont < Len(aBreaks),",","")
 Next
-cQuery += " " + c_ent
+cQuery += c_ent
 
 cQuery += "FROM "+RetSqlName("AK5")+" AK5 " + c_ent
 cQuery += "INNER JOIN "+RetSqlName("CTD")+" CTD " + c_ent
@@ -176,7 +176,6 @@ cQuery += "AND CTD.D_E_L_E_T_ = ' ' " + c_ent
 cQuery += "LEFT OUTER JOIN AKD010 AKD " + c_ent
 cQuery += "ON AKD_CO = AK5_CODIGO " + c_ent
 cQuery += "AND AKD_ITCTB = CTD_ITEM " + c_ent
-cQuery += "AND AKD.D_E_L_E_T_ = ' ' " + c_ent
 
 For nCont := 3 to Len(aBreaks)
 	cQuery += "LEFT OUTER JOIN "+RetSqlName(aBreaks[nCont,4])+" "+aBreaks[nCont,4]+" " + c_ent
@@ -191,56 +190,8 @@ cQuery += "AND ((AKD_DATA BETWEEN '"+DTOS(MV_PAR02)+"' AND '"+DTOS(MV_PAR03)+"')
 cQuery += "AND (AKD.D_E_L_E_T_ = ' ' OR AKD.D_E_L_E_T_ IS NULL) " + c_ent
 //cQuery += "AND ((AKD_CC >= '"+mv_par06+"' AND AKD_CC <= '"+mv_par07+"') OR AKD_CC IS NULL) " + c_ent
 
-cQuery += "AND ("+cCpo+" IS NULL OR (" + cFilQry1 + " " + c_ent
-cQuery += "OR " + cFilQry2 + ")) " + c_ent
-
-//inicio
-
-cQuery += "UNION ALL " + c_ent
-
-cQuery += "SELECT AKD_CC AS CENCUS,AK5_COSUP,"+cTab+".R_E_C_N_O_ AS REC"+cTab+",AKD_DATA,(CASE WHEN AKD_TIPO = 2 THEN (AKD_VALOR1*(-1)) ELSE AKD_VALOR1 END) AS AKD_VALOR1,"+cOrder+","
-For nCont := 1 to Len(aBreaks)
-	cQuery += aBreaks[nCont,5]+","+aBreaks[nCont,6] + iif(nCont < Len(aBreaks),",","")
-Next
-cQuery += " " + c_ent
-
-cQuery += "FROM "+RetSqlName("AK5")+" AK5 " + c_ent
-
-cQuery += "LEFT OUTER JOIN AKD010 AKD " + c_ent
-cQuery += "ON AKD_CO = AK5_CODIGO " + c_ent
-cQuery += "AND AKD.D_E_L_E_T_ = ' ' " + c_ent
-
-For nCont := 2 to Len(aBreaks)
-	cQuery += "LEFT OUTER JOIN "+RetSqlName(aBreaks[nCont,4])+" "+aBreaks[nCont,4]+" " + c_ent
-	cQuery += "ON "+iif(Substr(aBreaks[nCont,4],1,1)=="S",Substr(aBreaks[nCont,4],2,2),aBreaks[nCont,4])+"_FILIAL = '"+xfilial(aBreaks[nCont,4])+"' " + c_ent
-	cQuery += "AND "+aBreaks[nCont,5]+" = "+aBreaks[nCont,2]+" " + c_ent
-	cQuery += "AND "+aBreaks[nCont,4]+".D_E_L_E_T_ = ' ' " + c_ent
-Next
-
-cQuery += "WHERE AK5_FILIAL = '"+xFilial("AK5")+"' " + c_ent
-cQuery += "AND AK5_TIPO = '2' " + c_ent
-cQuery += "AND AK5.D_E_L_E_T_ = ' ' " + c_ent
-cQuery += "AND AK5_CODIGO NOT IN ( " + c_ent
-
-cQuery += "SELECT DISTINCT AK5_CODIGO " + c_ent
-cQuery += "FROM "+RetSqlName("AK5")+" AK5_2 " + c_ent
-cQuery += "INNER JOIN "+RetSqlName("CTD")+" CTD_2 " + c_ent
-cQuery += "ON AK5_2.AK5_FILIAL = '"+xFilial("AK5")+"' " + c_ent
-cQuery += "AND CTD_2.CTD_FILIAL = '"+xFilial("CTD")+"' " + c_ent
-cQuery += "AND CTD_2.CTD_XCO = AK5_2.AK5_CODIGO " + c_ent
-cQuery += "AND AK5_2.D_E_L_E_T_ = ' ' " + c_ent
-cQuery += "AND CTD_2.D_E_L_E_T_ = ' ') " + c_ent
-
-cQuery += "AND (AKD_FILIAL = '"+xfilial("AKD")+"' OR AKD_FILIAL IS NULL) " + c_ent
-cQuery += "AND (AKD_STATUS = '1' OR AKD_STATUS IS NULL) " + c_ent
-cQuery += "AND ((AKD_DATA BETWEEN '"+DTOS(MV_PAR02)+"' AND '"+DTOS(MV_PAR03)+"') OR AKD_DATA IS NULL) "+ c_ent      
-cQuery += "AND (AKD.D_E_L_E_T_ = ' ' OR AKD.D_E_L_E_T_ IS NULL) " + c_ent
-//cQuery += "AND ((AKD_CC >= '"+mv_par06+"' AND AKD_CC <= '"+mv_par07+"') OR AKD_CC IS NULL) " + c_ent
-
-cQuery += "AND ("+cCpo+" IS NULL OR (" + cFilQry1 + " " + c_ent
-cQuery += "OR " + cFilQry2 + ")) " + c_ent
-
-//fim
+cQuery += "AND ("+cCpo+" IS NULL OR (" + cFilQry1 + " "
+cQuery += "OR " + cFilQry2 + ")) "
 
 cOrder  := aBreaks[1,5]+","+aBreaks[2,5]+","+cOrder
 
@@ -337,50 +288,39 @@ While !(cAlias)->(EOF())
 				endif
 			Next	
 		endif
-		lOutItm := .F.
-		if aBreaks[nCont,4] == "CTD"
-			cOutItm := GetMV("MV_XOUTITM")
-			if !(cOutItm == "")
-				if Alltrim(&("(cAlias)->"+aBreaks[nCont,5])) $ cOutItm
-					lOutItm := .T.
-				endif
-			endif
-		endif
-		if !lOutItm
-			nLinha := Ascan(aLinha,{|x| Alltrim(x[1]) == Alltrim(aBreaks[nCont,8]) .and. ;
-				Alltrim(x[2]) == iif(Alltrim(&("(cAlias)->("+aBreaks[nCont,3]+")"))<>"",;
+		nLinha := Ascan(aLinha,{|x| Alltrim(x[1]) == Alltrim(aBreaks[nCont,8]) .and. ;
+			Alltrim(x[2]) == iif(Alltrim(&("(cAlias)->("+aBreaks[nCont,3]+")"))<>"",;
+			Alltrim(&("(cAlias)->("+aBreaks[nCont,3]+")")),;
+			Alltrim(&("(cAlias)->("+aBreaks[nCont,7]+")")))+;
+			iif(Alltrim(&("(cAlias)->"+aBreaks[nCont,2]))<>"",;
+			Alltrim(&("(cAlias)->"+aBreaks[nCont,2])),;
+			Alltrim(&("(cAlias)->"+aBreaks[nCont,5])))})
+		if nLinha = 0
+			aadd(aLinha,{Alltrim(aBreaks[nCont,8]),;
+				iif(Alltrim(&("(cAlias)->("+aBreaks[nCont,3]+")"))<>"",;
 				Alltrim(&("(cAlias)->("+aBreaks[nCont,3]+")")),;
 				Alltrim(&("(cAlias)->("+aBreaks[nCont,7]+")")))+;
 				iif(Alltrim(&("(cAlias)->"+aBreaks[nCont,2]))<>"",;
 				Alltrim(&("(cAlias)->"+aBreaks[nCont,2])),;
-				Alltrim(&("(cAlias)->"+aBreaks[nCont,5])))})
-			if nLinha = 0
-				aadd(aLinha,{Alltrim(aBreaks[nCont,8]),;
-					iif(Alltrim(&("(cAlias)->("+aBreaks[nCont,3]+")"))<>"",;
-					Alltrim(&("(cAlias)->("+aBreaks[nCont,3]+")")),;
-					Alltrim(&("(cAlias)->("+aBreaks[nCont,7]+")")))+;
-					iif(Alltrim(&("(cAlias)->"+aBreaks[nCont,2]))<>"",;
-					Alltrim(&("(cAlias)->"+aBreaks[nCont,2])),;
-					Alltrim(&("(cAlias)->"+aBreaks[nCont,5]))),;
-					iif(Alltrim(&("(cAlias)->"+aBreaks[nCont,2]))<>"",;
-					Alltrim(&("(cAlias)->"+aBreaks[nCont,2])),;
-					Alltrim(&("(cAlias)->"+aBreaks[nCont,5]))),;
-					Alltrim(&("(cAlias)->"+aBreaks[nCont,6])),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0})
-				nLinha := Len(aLinha)
-			endif
-			if !(Alltrim((cAlias)->AKD_DATA) == "")
-				dbSelectArea(cTab)
-				&(cTab+"->(dbGoTo((cAlias)->REC"+cTab+"))")
-				if &(cFiltro1)
-					if (cAlias)->CENCUS >= mv_par06 .and. (cAlias)->CENCUS <= mv_par07
-						aLinha[nLinha,((Val(Substr((cAlias)->AKD_DATA,5,2))*2)-1)+4] += (cAlias)->AKD_VALOR1
-						aLinha[nLinha,29] += (cAlias)->AKD_VALOR1
-					endif
-				elseif &(cFiltro2)
-					if (cAlias)->CENCUS >= mv_par06 .and. (cAlias)->CENCUS <= mv_par07
-						aLinha[nLinha,(Val(Substr((cAlias)->AKD_DATA,5,2))*2)+4] += (cAlias)->AKD_VALOR1
-						aLinha[nLinha,30] += (cAlias)->AKD_VALOR1
-					endif
+				Alltrim(&("(cAlias)->"+aBreaks[nCont,5]))),;
+				iif(Alltrim(&("(cAlias)->"+aBreaks[nCont,2]))<>"",;
+				Alltrim(&("(cAlias)->"+aBreaks[nCont,2])),;
+				Alltrim(&("(cAlias)->"+aBreaks[nCont,5]))),;
+				Alltrim(&("(cAlias)->"+aBreaks[nCont,6])),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0})
+			nLinha := Len(aLinha)
+		endif
+		if !(Alltrim((cAlias)->AKD_DATA) == "")
+			dbSelectArea(cTab)
+			&(cTab+"->(dbGoTo((cAlias)->REC"+cTab+"))")
+			if &(cFiltro1)
+				if (cAlias)->CENCUS >= mv_par06 .and. (cAlias)->CENCUS <= mv_par07
+					aLinha[nLinha,((Val(Substr((cAlias)->AKD_DATA,5,2))*2)-1)+4] += (cAlias)->AKD_VALOR1
+					aLinha[nLinha,29] += (cAlias)->AKD_VALOR1
+				endif
+			elseif &(cFiltro2)
+				if (cAlias)->CENCUS >= mv_par06 .and. (cAlias)->CENCUS <= mv_par07
+					aLinha[nLinha,(Val(Substr((cAlias)->AKD_DATA,5,2))*2)+4] += (cAlias)->AKD_VALOR1
+					aLinha[nLinha,30] += (cAlias)->AKD_VALOR1
 				endif
 			endif
 		endif	
