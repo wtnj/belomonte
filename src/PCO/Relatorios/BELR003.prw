@@ -246,6 +246,8 @@ cOrder  := aBreaks[1,5]+","+aBreaks[2,5]+","+cOrder
 
 cQuery += "ORDER BY "+cOrder + c_ent
 
+MemoWrite("c:\temp\",cQuery)
+
 If Select(cAlias) > 0
 	dbSelectArea(cAlias)
 	(cAlias)->(dbCloseArea())
