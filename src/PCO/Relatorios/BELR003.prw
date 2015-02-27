@@ -307,11 +307,17 @@ While !(cAlias)->(EOF())
 					Alltrim(x[2]) == Alltrim(aCoSup[nCont3])+;
 					Alltrim(aCoSup[nCont3])})
 				if nLinha = 0
+					dbSelectArea("AK5")
+					AK5->(dbSetOrder(1))
+					cDescSup := ""
+					if AK5->(dbSeek(xFilial("AK5")+Alltrim(aCoSup[nCont3])))
+						cDescSup := Alltrim(AK5->AK5_DESCRI)
+					endif
 					aadd(aLinha,{Alltrim(aBreaks[nCont,8]),;
 						Alltrim(aCoSup[nCont3])+;
 						Alltrim(aCoSup[nCont3]),;
 						Alltrim(aCoSup[nCont3]),;
-						Alltrim(&("(cAlias)->"+aBreaks[nCont,6])),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0})
+						Alltrim(cDescSup),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0})
 					nLinha := Len(aLinha)
 				endif
 				if !(Alltrim((cAlias)->AKD_DATA) == "")
