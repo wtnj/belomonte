@@ -246,7 +246,7 @@ cOrder  := aBreaks[1,5]+","+aBreaks[2,5]+","+cOrder
 
 cQuery += "ORDER BY "+cOrder + c_ent
 
-MemoWrite("c:\temp\",cQuery)
+MemoWrite("c:\temp\BELR003.TXT",cQuery)
 
 If Select(cAlias) > 0
 	dbSelectArea(cAlias)

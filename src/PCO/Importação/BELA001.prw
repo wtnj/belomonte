@@ -282,38 +282,42 @@ While !FT_FEOF()
     //ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
   
   	For _cc := 1 to Len(_cMes)
-  
-    	DbSelectArea("AK2") 
-	   	DbSetorder(1)
-	   	_xRet := !(DbSeek(Xfilial("AK2")+padr(aItens[2],tamsx3("AK2_ORCAME")[1])+padr(aItens[3],tamsx3("AK2_VERSAO")[1])+padr(aItens[4],tamsx3("AK2_CO")[1])+aItens[32]+AllTrim(STRZERO(_cc,2))+"01"+AllTrim(Strzero(Val(aItens[1]),4))))
-	       
-		RecLock("AK2",_xRet) 
-	                                     
-        AK2->AK2_FILIAL 	:= xFilial("AK2")                  
-  	    AK2->AK2_ID         := AllTrim(Strzero(Val(aItens[1]),4))         
-       	AK2->AK2_ORCAME     := aItens[2]
-       	AK2->AK2_VERSAO     := AllTrim(Strzero(Val(aItens[3]),4))
-        AK2->AK2_CO         := aItens[4]
-        AK2->AK2_PERIOD     := STOD(aItens[32]+AllTrim(STRZERO(_cc,2))+"01")//aItens[5]
-        AK2->AK2_CC         := aItens[12]
-        AK2->AK2_ITCTB      := aItens[16]
-        AK2->AK2_CLVLR      := aItens[14]
-        AK2->AK2_CLASSE     := aItens[6]
-        AK2->AK2_VALOR      := Val(StrTran(_cMes[_cc],",",".")) 
-        AK2->AK2_DESCRI     := aItens[8]
-        AK2->AK2_OPER       := aItens[10]
-        AK2->AK2_MOEDA 		:= 1
-        //AK2->AK2_CHAVE
-        AK2->AK2_DATAF      := Stod(Substr(DtoS(ddatabase),1,4)+AllTrim(STRZERO(_cc,2))+"01")//aItens[5]// usar função para trazer o ultimo dia do mes
-        AK2->AK2_DATAI      := Stod(Substr(DtoS(ddatabase),1,4)+AllTrim(STRZERO(_cc,2))+"01")//aItens[5]
-        AK2->AK2_UNIORC     := aItens[9]
-	        
-		MsUnlock()  
-	     
-	 	PcoIniLan("000252")//PROCESSO "000252 = IMPORTAÇÃO DE PLANILHA"
-		PcoDetLan("000252","01","BELA001")
-    	PcoFinLan("000252")	//     
-	   
+  		
+  		if Val(StrTran(_cMes[_cc],",",".")) > 0
+  		
+	    	DbSelectArea("AK2") 
+		   	DbSetorder(1)
+		   	_xRet := !(DbSeek(Xfilial("AK2")+padr(aItens[2],tamsx3("AK2_ORCAME")[1])+padr(aItens[3],tamsx3("AK2_VERSAO")[1])+padr(aItens[4],tamsx3("AK2_CO")[1])+aItens[32]+AllTrim(STRZERO(_cc,2))+"01"+AllTrim(Strzero(Val(aItens[1]),4))))
+		       
+			RecLock("AK2",_xRet) 
+		                                     
+	        AK2->AK2_FILIAL 	:= xFilial("AK2")                  
+	  	    AK2->AK2_ID         := AllTrim(Strzero(Val(aItens[1]),4))         
+	       	AK2->AK2_ORCAME     := aItens[2]
+	       	AK2->AK2_VERSAO     := AllTrim(Strzero(Val(aItens[3]),4))
+	        AK2->AK2_CO         := aItens[4]
+	        AK2->AK2_PERIOD     := STOD(aItens[32]+AllTrim(STRZERO(_cc,2))+"01")//aItens[5]
+	        AK2->AK2_CC         := aItens[12]
+	        AK2->AK2_ITCTB      := aItens[16]
+	        AK2->AK2_CLVLR      := aItens[14]
+	        AK2->AK2_CLASSE     := aItens[6]
+	        AK2->AK2_VALOR      := Val(StrTran(_cMes[_cc],",",".")) 
+	        AK2->AK2_DESCRI     := aItens[8]
+	        AK2->AK2_OPER       := aItens[10]
+	        AK2->AK2_MOEDA 		:= 1
+	        //AK2->AK2_CHAVE
+	        AK2->AK2_DATAF      := Stod(Substr(DtoS(ddatabase),1,4)+AllTrim(STRZERO(_cc,2))+"01")//aItens[5]// usar função para trazer o ultimo dia do mes
+	        AK2->AK2_DATAI      := Stod(Substr(DtoS(ddatabase),1,4)+AllTrim(STRZERO(_cc,2))+"01")//aItens[5]
+	        AK2->AK2_UNIORC     := aItens[9]
+		        
+			MsUnlock()  
+		     
+		 	PcoIniLan("000252")//PROCESSO "000252 = IMPORTAÇÃO DE PLANILHA"
+			PcoDetLan("000252","01","BELA001")
+	    	PcoFinLan("000252")	//     
+	    
+	    endif
+	    
 	Next _cc 
 	
 			
